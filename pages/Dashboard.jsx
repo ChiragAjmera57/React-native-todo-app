@@ -1,5 +1,5 @@
 import React from "react";
-import { FlatList, Image, StyleSheet, Text, View } from "react-native";
+import { FlatList, Image, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { SvgXml } from "react-native-svg";
 import { pic1, pic2, pic3, pic4, pic5, rightArrow } from "../assets/svgs";
@@ -7,16 +7,17 @@ import { GroupCard } from "../component/GroupCard";
 import { Wrapper } from "../component/Wrapper";
 import { ScheduleCard } from "../component/ScheduleCard";
 import { ScheduleCard2 } from "../component/ScheduleCard2";
+import { Bar } from "../component/Bar";
 
 const data = [
     { id: '1', title: 'Design Meeting', timing: 'Tomorrow | 10:30pm' },
     { id: '2', title: 'Project Meeting', timing: 'Tomorrow | 10:30pm' },
-
 ];
 export const Dashboard = () => {
     
   return (
     <LinearGradient colors={["#1253AA", "#05243E"]} style={styles.container}>
+      <Bar />
       <View style={styles.view1}>
         <Image source={require("../img/userLogo.png")} />
         <View style={{ marginLeft: 12 }}>
@@ -25,7 +26,8 @@ export const Dashboard = () => {
         </View>
         <Image style={{ marginLeft: 19 }} source={require("../img/bell.png")} />
       </View>
-      <View style={styles.mb10}>
+     <ScrollView>
+     <View style={styles.mb10}>
         <Wrapper>
         <Text style={styles.groupText}>Group tasks</Text>
         </Wrapper>
@@ -63,7 +65,7 @@ export const Dashboard = () => {
 
       <View>
       <Wrapper>
-      <Text style={styles.groupText}>Incomplete Tasks</Text>
+      <Text style={styles.groupText}>Completed Tasks</Text>
       </Wrapper>
            <View style={{display:'flex',gap:20}}>
            <FlatList
@@ -77,6 +79,7 @@ export const Dashboard = () => {
       />
            </View>
       </View>
+     </ScrollView>
     </LinearGradient>
   );
 };

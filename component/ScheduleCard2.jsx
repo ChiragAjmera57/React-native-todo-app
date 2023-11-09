@@ -15,7 +15,7 @@ export const ScheduleCard2 = () => {
     <Text style={{color:'rgba(0, 0, 0, 0.90)',fontSize:12,marginLeft:10}}>Tomorrow | 10:30pm</Text>
     </View>
     </View>
-    <SvgXml xml={rightArrow} />
+    <SvgXml style={{marginRight:20}} xml={rightArrow} />
     </View>
 </Wrapper>
   )

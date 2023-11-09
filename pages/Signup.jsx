@@ -5,6 +5,7 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Modal,
+  Platform,
   Switch,
   Text,
   TextInput,
@@ -17,6 +18,8 @@ import { svgXmlData, svglock, userLogo } from "../assets/svgs";
 import { Bar } from "../component/Bar";
 import { ComponentPop } from "../component/ComponentPop";
 import { BlurView } from "@react-native-community/blur";
+
+
 
 export const Signup = () => {
   const [username, setUsername] = useState("");

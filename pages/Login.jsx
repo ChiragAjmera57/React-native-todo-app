@@ -154,7 +154,7 @@ export const Login = () => {
             alignItems: "center",
           }}
         >
-          <Text style={{ fontFamily: "Poppins-Regular" }}>Sign In with:</Text>
+          <Text style={{ fontFamily: "Poppins-Regular",color:'white' }}>Sign In with:</Text>
           <View style={styles.imgContainer}>
             <Image
               style={styles.bottomLogo}
