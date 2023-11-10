@@ -8,6 +8,7 @@ import { Wrapper } from "../component/Wrapper";
 import { ScheduleCard } from "../component/ScheduleCard";
 import { ScheduleCard2 } from "../component/ScheduleCard2";
 import { Bar } from "../component/Bar";
+import * as Animatable from 'react-native-animatable';
 
 const data = [
     { id: '1', title: 'Design Meeting', timing: 'Tomorrow | 10:30pm' },
@@ -18,8 +19,8 @@ const data = [
     { id: '2', title: 'Project Meeting', timing: 'Tomorrow | 10:30pm' },
     { id: '2', title: 'Project Meeting', timing: 'Tomorrow | 10:30pm' },
 ];
-export const Dashboard = () => {
-    
+export const Dashboard = (props) => {
+    console.log(props); 
   return (
     <LinearGradient colors={["#1253AA", "#05243E"]} style={styles.container}>
       <Bar />
@@ -43,6 +44,7 @@ export const Dashboard = () => {
         horizontal
         showsHorizontalScrollIndicator={false}
         renderItem={({ item }) => (
+          
           <GroupCard title={item.title} timing={item.timing} />
         )}
       />

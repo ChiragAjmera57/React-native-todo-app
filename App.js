@@ -6,6 +6,7 @@ import { Dashboard } from "./pages/Dashboard";
 import { NavigationContainer } from '@react-navigation/native';
 import { Home } from "./pages/Home";
 import { TodoList } from "./pages/TodoList";
+import { Setting } from "./pages/Setting";
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
     <NavigationContainer>
      {/* <Signup /> */}
      {/* <Home></Home> */}
+     {/* <Setting /> */}
      <Home />
      {/* <TodoList /> */}
     </NavigationContainer>
