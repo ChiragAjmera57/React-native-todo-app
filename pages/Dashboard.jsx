@@ -12,6 +12,11 @@ import { Bar } from "../component/Bar";
 const data = [
     { id: '1', title: 'Design Meeting', timing: 'Tomorrow | 10:30pm' },
     { id: '2', title: 'Project Meeting', timing: 'Tomorrow | 10:30pm' },
+    { id: '2', title: 'Project Meeting', timing: 'Tomorrow | 10:30pm' },
+    { id: '2', title: 'Project Meeting', timing: 'Tomorrow | 10:30pm' },
+    { id: '2', title: 'Project Meeting', timing: 'Tomorrow | 10:30pm' },
+    { id: '2', title: 'Project Meeting', timing: 'Tomorrow | 10:30pm' },
+    { id: '2', title: 'Project Meeting', timing: 'Tomorrow | 10:30pm' },
 ];
 export const Dashboard = () => {
     

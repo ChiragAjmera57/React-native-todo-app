@@ -5,6 +5,7 @@ import { ComponentPop } from "./component/ComponentPop";
 import { Dashboard } from "./pages/Dashboard";
 import { NavigationContainer } from '@react-navigation/native';
 import { Home } from "./pages/Home";
+import { TodoList } from "./pages/TodoList";
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
      {/* <Signup /> */}
      {/* <Home></Home> */}
      <Home />
+     {/* <TodoList /> */}
     </NavigationContainer>
     // <ComponentPop />
   );
