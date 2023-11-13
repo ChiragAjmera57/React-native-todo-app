@@ -14,34 +14,51 @@ import LinearGradient from "react-native-linear-gradient";
 import { SvgXml } from "react-native-svg";
 import { svgXmlData, svglock } from "../assets/svgs";
 import { Bar } from "../component/Bar";
+import { useReducer } from "react";
+import { userlogin } from "../utils/login/LoginRequest";
+import { Pressable } from "react-native";
+import { useContext } from "react";
+import { AuthContext } from "../Context/AuthContext";
+// import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+
+const initialState = {
+  email: "",
+  password: "",
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "SET_EMAIL":
+      return { ...state, email: action.payload };
+    case "SET_PASSWORD":
+      return { ...state, password: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const Login = ({navigation }) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+  const {store} = useContext(AuthContext)
 
   const inputref = useRef(null);
-  const handleLogin = () => {
-    // Implement your login logic here
-    console.log("Logging in with:", username, password);
+const {setToken} = store
+
+  const handleSubmit = () => {
+    userlogin(state).then((res)=>{  
+      setToken(res.token)
+    }).catch((err)=>{
+      console.log('====================================');
+      console.log(err);
+      console.log('====================================');
+    })
   };
 
-  const handleGoogleLogin = () => {
-    // Implement Google login here
-    console.log("Logging in with Google");
-  };
 
-  const handleAppleLogin = () => {
-    // Implement Apple login here
-    console.log("Logging in with Apple");
-  };
-
-  const handleForgotPassword = () => {
-    // Implement your "Forgot Password" logic here
-    console.log("Forgot Password");
-  };
   const handleBackButton = () => {
-    console.log(`back clicked`);
     Keyboard.dismiss(() => {
       inputref.current.blur();
     });
@@ -100,6 +117,8 @@ export const Login = () => {
               autoCapitalize="none"
               placeholderTextColor="rgba(0, 0, 0, 0.44)"
               maxLength={30}
+              onChangeText={(text) => dispatch({ type: "SET_EMAIL", payload: text })}
+              value={state.email}
             />
           </View>
         </View>
@@ -113,6 +132,8 @@ export const Login = () => {
               autoCapitalize="none"
               maxLength={30}
               placeholderTextColor="rgba(0, 0, 0, 0.44)"
+              onChangeText={(text) => dispatch({ type: "SET_PASSWORD", payload: text })}
+              value={state.password}
             />
           </View>
         </View>
@@ -128,9 +149,10 @@ export const Login = () => {
         >
           forget password?
         </Text>
-        <TouchableOpacity style={styles.btn}>
+        <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
           <Text style={{ color: "white" }}>Sign in</Text>
         </TouchableOpacity>
+        <Pressable onPress={()=>navigation.replace('Signup')}>
         <Text
           style={{
             fontFamily: "Poppins-Regular",
@@ -139,8 +161,9 @@ export const Login = () => {
             color: "white",
           }}
         >
-          Don’t have an account? sign up
+          Don’t have an account? Signup
         </Text>
+        </Pressable>
       </KeyboardAvoidingView>
       <View
         style={[styles.view3, isKeyboardVisible ? { display: "none" } : {}]}

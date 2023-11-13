@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList, Image, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { SvgXml } from "react-native-svg";
@@ -9,26 +9,50 @@ import { ScheduleCard } from "../component/ScheduleCard";
 import { ScheduleCard2 } from "../component/ScheduleCard2";
 import { Bar } from "../component/Bar";
 import * as Animatable from 'react-native-animatable';
+import { useContext } from "react";
+import { AuthContext } from "../Context/AuthContext";
+import { fetchDataWithAuthentication } from "../utils/fetchTodo/fetchTodosRequest";
+import { fetchuser } from "../utils/fetchuser/fetchuser";
 
 const data = [
     { id: '1', title: 'Design Meeting', timing: 'Tomorrow | 10:30pm' },
     { id: '2', title: 'Project Meeting', timing: 'Tomorrow | 10:30pm' },
-    { id: '2', title: 'Project Meeting', timing: 'Tomorrow | 10:30pm' },
-    { id: '2', title: 'Project Meeting', timing: 'Tomorrow | 10:30pm' },
-    { id: '2', title: 'Project Meeting', timing: 'Tomorrow | 10:30pm' },
-    { id: '2', title: 'Project Meeting', timing: 'Tomorrow | 10:30pm' },
-    { id: '2', title: 'Project Meeting', timing: 'Tomorrow | 10:30pm' },
 ];
+
+
 export const Dashboard = (props) => {
-    console.log(props); 
+
+
+  const [tasks,settasks] = useState([])
+  const {store} =useContext(AuthContext)
+ const {token} =store
+ const[user,setuser] = useState({})
+ 
+ const reFetchDataTohome =()=>{
+  fetchDataWithAuthentication(token).then((res)=>{
+    settasks(res.tasks)
+  }).catch((err)=>{
+    console.log(err);
+  })
+ }
+ useEffect(()=>{
+   fetchDataWithAuthentication(token).then((res)=>{
+     settasks(res.tasks)
+   }).catch((err)=>{
+     console.log(err);
+   })
+   fetchuser(token).then((res)=>{
+    setuser(res.findUser)
+   })
+ })
   return (
     <LinearGradient colors={["#1253AA", "#05243E"]} style={styles.container}>
       <Bar />
       <View style={styles.view1}>
         <Image source={require("../img/userLogo.png")} />
         <View style={{ marginLeft: 12 }}>
-          <Text style={styles.nameText}>oussama chahidi</Text>
-          <Text style={styles.emailText}>oussamachahidi@gmail.com</Text>
+          <Text style={styles.nameText}>{user.name}</Text> 
+          <Text style={styles.emailText}>{user.email}</Text>
         </View>
         <Image style={{ marginLeft: 19 }} source={require("../img/bell.png")} />
       </View>
@@ -58,19 +82,19 @@ export const Dashboard = (props) => {
       </Wrapper>
            <View style={{display:'flex',gap:20}}>
            <FlatList
-        data={data}
+        data={tasks}
         keyExtractor={(item, index) => `${item.id}-${index}`}
         showsHorizontalScrollIndicator={false}
         ItemSeparatorComponent={<View style={styles.separator} />} 
         renderItem={({ item }) => (
-          <ScheduleCard title={item.title} timing={item.timing} />
+          <ScheduleCard ele={item} title={item.title} date={item.date} content={item.content} reFetchDataTohome={reFetchDataTohome} />
         )}
       />
            </View>
       </View>
 
 
-      <View>
+      <View style={{marginBottom:80}}>
       <Wrapper>
       <Text style={styles.groupText}>Completed Tasks</Text>
       </Wrapper>

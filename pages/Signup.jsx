@@ -1,53 +1,60 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  BackHandler,
-  Image,
-  Keyboard,
-  KeyboardAvoidingView,
-  Modal,
-  Platform,
-  Switch,
-  Text,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
+import { BackHandler, Image, Keyboard, KeyboardAvoidingView, Modal, Text, TextInput, TouchableOpacity} from "react-native";
 import { StyleSheet, View } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { SvgXml } from "react-native-svg";
 import { svgXmlData, svglock, userLogo } from "../assets/svgs";
 import { Bar } from "../component/Bar";
 import { ComponentPop } from "../component/ComponentPop";
-import { BlurView } from "@react-native-community/blur";
+import { useReducer } from "react";
+import { signUpUser } from "../utils/signup/PostSignupRequest";
+import { useContext } from "react";
+import { AuthContext } from "../Context/AuthContext";
+import { Pressable } from "react-native";
 
 
 
-export const Signup = () => {
-  const [username, setUsername] = useState("");
+const initialState = {
+  name: "",
+  email: "",
+  password: "",
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "SET_FULL_NAME":
+      return { ...state, name: action.payload };
+    case "SET_EMAIL":
+      return { ...state, email: action.payload };
+    case "SET_PASSWORD":
+      return { ...state, password: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const Signup = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [password, setPassword] = useState("");
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
-
+  const [state, dispatch] = useReducer(reducer, initialState);
+  
   const inputref = useRef(null);
-  const handleLogin = () => {
-    console.log("Logging in with:", username, password);
-  };
+ 
+  const handleSubmit = ()=>{
+    const result = signUpUser(state).then((res)=>{
+      setModalVisible(true)
+      
+      setTimeout(() => {
+      
+        navigation.replace('Login')
+      }, 1500);
+      
+    }).catch((err)=>{
+      console.log(`error ${err}`);
+    })
+  }
 
-  const handleGoogleLogin = () => {
-    // Implement Google login here
-    console.log("Logging in with Google");
-  };
-
-  const handleAppleLogin = () => {
-    // Implement Apple login here
-    console.log("Logging in with Apple");
-  };
-
-  const handleForgotPassword = () => {
-    // Implement your "Forgot Password" logic here
-    console.log("Forgot Password");
-  };
   const handleBackButton = () => {
-    console.log(`back clicked`);
     Keyboard.dismiss(() => {
       inputref.current.blur();
     });
@@ -56,6 +63,7 @@ export const Signup = () => {
   };
 
   useEffect(() => {
+   
     BackHandler.addEventListener("hardwareBackPress", handleBackButton);
     return () => {
       BackHandler.removeEventListener("hardwareBackPress", handleBackButton);
@@ -112,6 +120,8 @@ export const Signup = () => {
               autoCapitalize="none"
               maxLength={30}
               placeholderTextColor="rgba(0, 0, 0, 0.44)"
+              onChangeText={(text) => dispatch({ type: "SET_FULL_NAME", payload: text })}
+              value={state.name}
             />
           </View>
         </View>
@@ -131,6 +141,8 @@ export const Signup = () => {
               autoCapitalize="none"
               placeholderTextColor="rgba(0, 0, 0, 0.44)"
               maxLength={30}
+              onChangeText={(text) => dispatch({ type: "SET_EMAIL", payload: text })}
+              value={state.email}
             />
           </View>
         </View>
@@ -144,13 +156,16 @@ export const Signup = () => {
               autoCapitalize="none"
               maxLength={30}
               placeholderTextColor="rgba(0, 0, 0, 0.44)"
+              onChangeText={(text) => dispatch({ type: "SET_PASSWORD", payload: text })}
+              value={state.password}
             />
           </View>
         </View>
 
-        <TouchableOpacity onPress={()=>setModalVisible(true)}  style={styles.btn}>
+        <TouchableOpacity onPress={handleSubmit}  style={styles.btn}>
           <Text style={{ color: "white" }}>Sign up</Text>
         </TouchableOpacity>
+        <Pressable onPress={()=>navigation.replace('Login')}>
         <Text
           style={{
             fontFamily: "Poppins-Regular",
@@ -161,6 +176,7 @@ export const Signup = () => {
         >
           Already have an account? sign in
         </Text>
+        </Pressable>
       </KeyboardAvoidingView>
       <View
         style={[styles.view3, isKeyboardVisible ? { display: "none" } : {},modalVisible?{display:'none'}:{}]}

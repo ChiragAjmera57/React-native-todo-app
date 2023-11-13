@@ -3,7 +3,6 @@ import { Dashboard } from './Dashboard';
 import { Login } from './Login';
 import { SvgXml } from 'react-native-svg';
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { dashbottomON, dashbottomSvgOff, svg2ON, svg2off } from '../assets/svgs';
 import { TodoList } from './TodoList';
 import { Setting } from './Setting';
 import { useEffect } from 'react';
@@ -11,7 +10,6 @@ import * as Animatable from 'react-native-animatable';
 import { TouchableOpacity } from 'react-native';
 import { StyleSheet } from 'react-native';
 import { useRef } from 'react';
-import AnimatedSlidingComponent from './Animated';
 
 const Tab = createBottomTabNavigator();
 
@@ -24,6 +22,8 @@ const TabArr = [
 
 
 export const Home = () => {
+
+ 
   return (
     <Tab.Navigator
     
@@ -76,7 +76,7 @@ const TabButton = (props) => {
       style={styles.container}>
       <Animatable.View
         ref={viewRef}
-        duration={1000}
+        duration={500}
         style={styles.container}>
         <Ionicons  name={item.type} color={focused ? '#1253AA' : 'black'} size={25}/>
       </Animatable.View>

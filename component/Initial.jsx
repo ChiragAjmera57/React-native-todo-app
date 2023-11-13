@@ -1,10 +1,12 @@
 import React from "react";
 import { View, StyleSheet, Text, Image } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
+import { Bar } from "./Bar";
 
 export const Initial = () => {
   return (
     <LinearGradient colors={["#1253AA", "#05243E"]} style={{ flex: 1 ,justifyContent:'space-around'}}>
+      <Bar />
       <View style={styles.container} >
       <Image source={require("../img/Checkmark.png")} style={styles.img} />
       

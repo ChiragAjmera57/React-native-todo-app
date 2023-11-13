@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import { FlatList, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native'
 import { ScheduleCard } from '../component/ScheduleCard'
 import { Wrapper } from '../component/Wrapper'
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { Text } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { Bar } from '../component/Bar'
@@ -12,6 +13,8 @@ import { useState } from 'react'
 import { AddTodoModal } from '../component/AddTodoModal'
 import { ScrollView } from 'react-native'
 import { Pressable } from 'react-native'
+import { fetchDataWithAuthentication } from '../utils/fetchTodo/fetchTodosRequest';
+import { AuthContext } from '../Context/AuthContext';
 
 
 const data = [
@@ -28,6 +31,31 @@ const data = [
 ];
 export const TodoList = () => {
     const [showmodal,setshowmodal] =useState(false)
+    const [tasks,settasks] = useState([])
+ const {store} =useContext(AuthContext)
+const {token} =store
+const reFetchData =()=>{
+  fetchDataWithAuthentication(token).then((res)=>{
+    settasks(res.tasks)
+  }).catch((err)=>{
+    console.log(err);
+  })
+}
+const reFetchDataTohome =()=>{
+  fetchDataWithAuthentication(token).then((res)=>{
+    settasks(res.tasks)
+  }).catch((err)=>{
+    console.log(err);
+  })
+}
+useEffect(()=>{
+  fetchDataWithAuthentication(token).then((res)=>{
+    settasks(res.tasks)
+  }).catch((err)=>{
+    console.log(err);
+  })
+})
+
   return (
     <LinearGradient colors={["#1253AA", "#05243E"]} style={{flex:1}}>
          <Bar/>
@@ -46,12 +74,12 @@ export const TodoList = () => {
       </Wrapper>
            <View style={{display:'flex',gap:20,marginBottom:100}}>
            <FlatList
-        data={data}
+        data={tasks}
         keyExtractor={(item, index) => `${item.id}-${index}`}
         showsHorizontalScrollIndicator={false}
         ItemSeparatorComponent={<View style={styles.separator} />} 
         renderItem={({ item }) => (
-          <ScheduleCard title={item.title} timing={item.timing} />
+          <ScheduleCard ele={item} title={item.title} date={item.date.toString()} content={item.content} reFetchDataTohome={reFetchDataTohome} />
         )}
       />
            </View>
@@ -59,7 +87,7 @@ export const TodoList = () => {
            
       </View>
        </ScrollView>
-       <Pressable onPress={()=>setshowmodal(true)}>
+       <Pressable onPress={()=>setshowmodal(true)} >
             <View  style={{ position: 'absolute', top: -140,right:90}}>
                     <SvgXml
                     style={{ position: "absolute" }}
@@ -77,8 +105,9 @@ export const TodoList = () => {
       animationType='slide'
       transparent
       >
-        <AddTodoModal />
+        <AddTodoModal reFetchData={reFetchData} closeModal={()=>setshowmodal(false)}  />
       </Modal>
+      
     </LinearGradient>
   )
 }

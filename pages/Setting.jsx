@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { View } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { SvgXml } from "react-native-svg";
-import { conversation, goBack, idea, logoutSvg, outerSvg, pic1, pic2, pic3, pic4, pic5, profile, terms } from "../assets/svgs";
+import { conversation, goBack, idea, logoutSvg, outerSvg,profile, terms } from "../assets/svgs";
 import { Text } from "react-native";
 import { ScheduleCard3 } from "../component/ScheduleCard3";
 import { TouchableOpacity } from "react-native";
 import { StyleSheet } from "react-native";
+import { AuthContext } from "../Context/AuthContext";
 
 
 const data = [
@@ -24,6 +25,8 @@ const data = [
     }
 ]
 export const Setting = () => {
+  const {store} = useContext(AuthContext)
+  const {logOut} = store
   return (
     <LinearGradient
       LinearGradient
@@ -54,7 +57,7 @@ export const Setting = () => {
             })
         }
       </View>
-      <TouchableOpacity style={styles.btn}>
+      <TouchableOpacity style={styles.btn} onPress={()=>logOut()}>
         <SvgXml xml={logoutSvg} />
           <Text style={{ color: "#DC4343",marginLeft:15,fontSize:16,fontFamily:'Poppins-Regular' }}>Logout</Text>
         </TouchableOpacity>

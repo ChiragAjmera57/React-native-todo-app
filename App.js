@@ -1,27 +1,14 @@
 import React from "react";
-import { Login } from "./pages/Login";
-import { Signup } from "./pages/Signup";
-import { ComponentPop } from "./component/ComponentPop";
-import { Dashboard } from "./pages/Dashboard";
-import { NavigationContainer } from '@react-navigation/native';
-import { Home } from "./pages/Home";
-import { TodoList } from "./pages/TodoList";
-import { Setting } from "./pages/Setting";
+import { Main } from "./main/Main";
+import { AuthProvider } from "./Context/AuthContext";
+
 
 const App = () => {
   return (
-    // <Login />
-   
-    <NavigationContainer>
-     {/* <Signup /> */}
-     {/* <Home></Home> */}
-     {/* <Setting /> */}
-     <Home />
-     {/* <TodoList /> */}
-    </NavigationContainer>
-    // <ComponentPop />
+    <AuthProvider>
+      <Main />
+    </AuthProvider>
   );
 };
-
 
 export default App;

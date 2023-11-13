@@ -1,4 +1,4 @@
-import React, { useContext, useReducer, useState } from 'react'
+import React, { useContext, useEffect, useReducer, useState } from 'react'
 import { TextInput, View } from 'react-native'
 import { calanderSvg, describeSVg, rightSvg, timeSvg } from '../assets/svgs'
 import { StyleSheet } from 'react-native'
@@ -10,6 +10,7 @@ import { TouchableOpacity } from 'react-native'
 import { CreateRequest } from '../utils/createTodo/CreateRequest';
 import { AuthContext } from '../Context/AuthContext';
 import { createTaskWithToken } from '../utils/createTodo/createTodoRequest';
+import { updateTask } from '../utils/updateRequest/UpdatetodoReq';
 
 
 const initialValue = {
@@ -30,25 +31,37 @@ const reducer = (state, action) => {
   }
 };
 
-export const AddTodoModal = ({closeModal,reFetchData}) => {
+export const UpdateTodoModal = ({closeModal,reFetchData}) => {
 
   const {store} = useContext(AuthContext)
-  const {token} = store
+  const {singleTodo} = store
 
+  const {setSingleTodo } = store
   const [date, setDate] = useState(new Date);
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
-  const [state, dispatch] = useReducer(reducer, initialValue);
+  const [state, dispatch] = useReducer(reducer, {
+    title:singleTodo.title,
+    content:singleTodo.content,
+  });
 
 const handleSubmit = ()=>{
-  createTaskWithToken(state,date,token).then((res)=>{
-    dispatch({ type: "RESET" });
-    reFetchData()
-    closeModal()
+  const {content,title} = state
+  const {token} = store
+  const {_id} = singleTodo
+  updateTask(_id, content,title,date,token).then((res)=>{
+     closeModal()
+  reFetchData()
   }).catch((err)=>{
+    console.log('====================================');
+    console.log(err);
+    console.log('====================================');
   })
-  
+
 }
+useEffect(()=>{
+
+})
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
